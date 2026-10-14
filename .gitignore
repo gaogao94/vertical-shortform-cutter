@@ -1,0 +1,18 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+
+# Render and work artifacts: never commit the media this skill produces
+work/
+out/
+*.ass
+*.srt
+*.mp4
+*.mov
+*.jpg
+*.jpeg
+*.png
+
+# Python environment
+.venv/
+venv/
