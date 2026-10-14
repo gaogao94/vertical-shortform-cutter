@@ -16,6 +16,12 @@ survives a phone screen.
 Do not re-transcribe on this machine. It costs minutes on CPU and the caller
 already has better timings.
 
+**Before planning any work, read [`references/TIME-BUDGET.md`](references/TIME-BUDGET.md).**
+It carries the measured cost of each step on a modest machine, and the two decisions
+that dominate the total: transcribing here (35% of the run) and rendering frame by
+frame (41%). Both are avoidable, and a run that takes both shortcuts finishes in
+about a quarter of the time.
+
 ## What "good" looks like at the end
 
 - A vertical MP4 at the source resolution, 30 fps, H.264 + AAC, `+faststart`.
@@ -201,7 +207,7 @@ built and why, and which lines you dropped as filler with the reason for each.
 
 ## Traps that cost real time
 
-`references/TRAPS.md` holds 14 failures that are hard to notice and expensive to
+`references/TRAPS.md` holds 15 failures that are hard to notice and expensive to
 diagnose. Three of them fight over one mechanism — joining CJK character tokens,
 correcting the joined text, and choosing where a caption line may break — so read
 those together before changing any of them; a naive fix for one reintroduces

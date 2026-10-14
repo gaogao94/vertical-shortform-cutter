@@ -326,3 +326,37 @@ on top of `ffmpeg -i`.
 
 Budget the shim honestly: it is a compatibility layer, worth it when the real
 binary is unreachable, and worth removing the moment it is not.
+
+---
+
+## 14. Transcribing here, to save a download
+
+**Observe.** Hours disappear on a clip that should have taken minutes. The machine
+is pegged the whole time and the run is no better for it.
+
+**Why.** Two costs get underestimated because they look like one small step:
+
+1. **The transcription itself.** On a 2-core CPU with no GPU, 118 seconds of audio
+   takes **15.6 minutes** — about 8x realtime, and 35% of the whole job. A larger
+   model is several times slower again and wants more RAM than a small machine has.
+2. **The model download.** Whisper `large-v3` is ~3 GB. On a machine with 3.4 GB
+   free that fails part way through with `No space left on device` — after spending
+   the download time. Model caches also default to the system drive, which is
+   usually the smallest one.
+
+**Fix.** Treat transcription as out of scope: consume word-level timings from
+whatever tool the caller already uses. That removes the entire cost rather than
+optimising it, and external timings are usually more accurate anyway.
+
+When transcription genuinely cannot be avoided, decide it deliberately:
+
+- Check **free disk space and RAM first**, and point the model cache at a large
+  drive (`HF_HOME=/path/to/big/drive`).
+- Match the model to the hardware. Under 8 GB of RAM, a smaller model beats a
+  failed large one.
+- Budget it honestly: roughly **0.13 × audio minutes** of CPU time on a 2-core box,
+  which is minutes for a short clip and an hour for a long recording.
+
+**Tell.** If the plan starts with "first, transcribe the video", the expensive
+decision has already been made. See [`TIME-BUDGET.md`](TIME-BUDGET.md) for the full
+measured breakdown.
